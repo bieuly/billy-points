@@ -1,5 +1,36 @@
 import React, { Component } from 'react';
 import firebase from 'firebase';
+import CountUp from 'react-countup';
+import styled from 'styled-components';
+
+const AppContainer = styled.div`
+    height: 100vh;
+    width: 100vw;
+`;
+
+const Legend = styled.div`
+  display:block;
+  font-size: 11px;
+  padding-top: 30px;
+  padding-right: 40px;
+  text-align: right;
+`;
+
+const Main = styled.div`
+  display: flex;
+  height: calc(100% - 100px);
+  width: 100%;
+`;
+
+const CounterContainer = styled.div`
+  width: 100%;
+  text-align: center;
+  align-self: center;
+`;
+
+const Counter = styled(CountUp)`
+  font-size: 20em;
+`;
 
 class App extends Component {
 
@@ -21,11 +52,23 @@ class App extends Component {
     });
   }
 
+  handleCountingFinished = () => {
+    this.state.setState({
+      countingFinished: true
+    })
+  }
+
   render() {
     return (
-      <div className="App">
-        {`You have ${this.state.points} billy points!`}
-      </div>
+      <AppContainer>
+        <Legend>BP = Billy Points</Legend>
+        <Main>
+          <CounterContainer>
+              <Counter className end={this.state.points}/>
+            <span> BPs</span>
+          </CounterContainer>
+        </Main>
+      </AppContainer>
     );
   }
 }

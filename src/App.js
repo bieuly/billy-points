@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import LoginPage from './pages/LoginPage';
+import HomePage from './pages/HomePage';
 import DashboardPage from './pages/DashboardPage';
 import { Route, Switch, withRouter } from "react-router-dom";
 import styled from 'styled-components';
@@ -21,7 +21,7 @@ class App extends Component {
     return (
       <AppContainer>
         <Switch>
-          <Route exact path="/" component={LoginPage}/>
+          <Route exact path="/" component={HomePage}/>
           <Route exact path="/dashboard" component={DashboardPage}/>
         </Switch>
       </AppContainer>

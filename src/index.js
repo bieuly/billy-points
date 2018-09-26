@@ -4,8 +4,10 @@ import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import firebase from 'firebase';
+import { Router } from 'react-router-dom';
+import { createBrowserHistory } from 'history'
 
-var config = {
+const config = {
         apiKey: "AIzaSyA1GbbL5AGnvEjmt85H437wTUQ9FEhLKp8",
         authDomain: "billy-points.firebaseapp.com",
         databaseURL: "https://billy-points.firebaseio.com",
@@ -16,5 +18,12 @@ var config = {
 
 firebase.initializeApp(config);
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const browserHistory = createBrowserHistory();
+
+ReactDOM.render(
+        <Router history={browserHistory}>
+                <App />
+        </Router>,
+        document.getElementById('root')
+);
 registerServiceWorker();

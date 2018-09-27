@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Card, Icon, Form, Image, Segment } from 'semantic-ui-react'
+import { Button, Card, Message, Icon, Form, Image, Segment } from 'semantic-ui-react'
 import styled from 'styled-components';
 import firebase from 'firebase';
 
@@ -47,16 +47,25 @@ class HomePage extends Component {
         this.setState({
             login: {
                 ...this.state.login,
-                [e.target.id]: e.target.value
+                [e.target.id]: e.target.value,
+                error: false
             }
         })
     }
 
     handleLoginSubmit = async () => {
-        await firebase.auth().signInWithEmailAndPassword(this.state.login.username, this.state.login.password);
-        firebase.auth().onAuthStateChanged((user) => {
-            this.props.history.push("/dashboard")
-        })
+        try {
+            await firebase.auth().signInWithEmailAndPassword(this.state.login.username, this.state.login.password)  
+            firebase.auth().onAuthStateChanged((user) => {
+                this.props.history.push(`/dashboard`)
+            })
+        } catch(error) {
+            this.setState({
+                login: {
+                    error: true
+                }
+            })
+        }
     }
 
     render() {
@@ -70,6 +79,7 @@ class HomePage extends Component {
                     <h1></h1>
                     <LoginForm onSubmit={this.handleLoginSubmit}>
                             <Segment>
+                                {this.state.login.error ? <Message>Invalid username/password</Message> : null}
                                 <Form.Input
                                     id='username'
                                     fluid

@@ -3,20 +3,20 @@ import { Button, Card, Message, Icon, Form, Image, Segment } from 'semantic-ui-r
 import styled from 'styled-components';
 import firebase from 'firebase';
 
-const HomePageContainer = styled.div`
+const SignUpPageContainer = styled.div`
     height: 100%;
     display: grid;
     grid-template-areas:
-        ". . . .  ."
-        ". . title loginForm ."
-        ". . . . ."
+        ". . . ."
+        ". signUpForm signUpForm ."
+        ". . . ."
 `;
 
-const LoginFormContainer = styled.div`
-    grid-area: loginForm
+const SignUpFormContainer = styled.div`
+    grid-area: signUpForm
 `;
 
-const LoginForm = styled(Form)`
+const SignUpForm = styled(Form)`
     height: 100%;
 `;
 
@@ -24,12 +24,7 @@ const FormButton = styled(Button)`
     margin-bottom: 10px !important;
 `;
 
-const TitleContainer = styled.div`
-    grid-area: title;
-    max-width: 300px;
-`;
-
-class HomePage extends Component {
+class SignUpPage extends Component {
 
     constructor(props) {
         super(props)
@@ -40,8 +35,6 @@ class HomePage extends Component {
             }
         }
     }
-
-
 
     handleOnChange = (e) => {
         this.setState({
@@ -55,7 +48,7 @@ class HomePage extends Component {
 
     handleLoginSubmit = async () => {
         try {
-            await firebase.auth().signInWithEmailAndPassword(this.state.login.username, this.state.login.password)  
+            await firebase.auth().createUserWithEmailAndPassword(this.state.login.username, this.state.login.password)  
             firebase.auth().onAuthStateChanged((user) => {
                 this.props.history.push(`/dashboard/${user.uid}`)
             })
@@ -70,15 +63,11 @@ class HomePage extends Component {
 
     render() {
         return (
-            <HomePageContainer>
-                <TitleContainer>
-                    <h1>Hello!</h1>
-                    <h2>Register to keep track of your points</h2>
-                    <FormButton onClick={()=>this.props.history.push("/signUp")} style={{"height": 75, "width": 190, "font-size": "1.53em"}}>Sign Up Now</FormButton>
-                </TitleContainer>
-                <LoginFormContainer>
+            <SignUpPageContainer>
+                <SignUpFormContainer>
+                    <h1>We're glad to have you.</h1>
                     {this.state.login.error ? <Message>Username or Password is invalid</Message> : null}
-                    <LoginForm onSubmit={this.handleLoginSubmit}>
+                    <SignUpForm onSubmit={this.handleLoginSubmit}>
                             <Segment style={{"min-width": "356px"}}>
                                 <Form.Input
                                     id='username'
@@ -97,16 +86,16 @@ class HomePage extends Component {
                                     type='password'
                                     onChange={(e)=>this.handleOnChange(e)}
                                 />
-                                <FormButton id="login" type="submit" primary fluid size='large'>
-                                    Login
+                                <FormButton id="signUp" type="submit" primary fluid size='large'>
+                                    Register
                                 </FormButton>
                             </Segment>
-                        </LoginForm>
-                </LoginFormContainer>
-            </HomePageContainer>
+                        </SignUpForm>
+                </SignUpFormContainer>
+            </SignUpPageContainer>
         )
     }
 
 }
 
-export default HomePage
+export default SignUpPage;

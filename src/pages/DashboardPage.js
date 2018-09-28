@@ -33,36 +33,40 @@ const Counter = styled(CountUp)`
 
 class DashboardPage extends Component {
     constructor(props) {
-        super(props);
-        this.state = {
-          points: 0
-        }
+      super(props);
+      this.state = {
+        points: 0
       }
-    
-      componentDidMount() {
-        const pointsRef = firebase.database().ref().child("points");
-        const billyRef = pointsRef.child("billy");
-        const billyPointsRef = billyRef.child("points");
-        billyPointsRef.on('value', snap => {
+    }
+  
+    componentDidMount() {
+      const { uid } = this.props.match.params;
+      const pointsRef = firebase.database().ref().child("points");
+      const userRef = pointsRef.child(uid);
+      if (userRef) {
+        userRef.on('value', snap => {
           this.setState({
             points: snap.val()
           });
         });
+      } else {
+        this.props.history.push("/")
       }
-
-    render() {
-        return (
-            <DashboardContainer>
-                <Legend>BP = Billy Points</Legend>
-                <Main>
-                    <CounterContainer>
-                        <Counter className end={this.state.points}/>
-                        <span> BPs</span>
-                    </CounterContainer>
-                </Main>
-            </DashboardContainer>
-        );
     }
+
+  render() {
+      return (
+          <DashboardContainer>
+              <Legend>BP = Billy Points</Legend>
+              <Main>
+                  <CounterContainer>
+                      <Counter className end={this.state.points}/>
+                      <span> BPs</span>
+                  </CounterContainer>
+              </Main>
+          </DashboardContainer>
+      );
+  }
 }
 
 export default DashboardPage;
